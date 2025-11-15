@@ -39,21 +39,21 @@ export default function RegisterPage() {
     setErrors(prev => ({ ...prev, [name]: fieldError }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  const validationErrors = validateRegister(form);
+  setErrors(validationErrors);
 
-    const validationErrors = validateRegister(form);
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length === 0) {
-      try {
-        await signup(form);
-        router.push("/auth/login");
-      } catch (err) {
-        console.error("Signup failed:", err);
-      }
+  if (Object.keys(validationErrors).length === 0) {
+    try {
+      await signup(form);
+      router.push("/auth/login");
+    } catch (err: any) {
+      console.error("Signup failed:", err.message);
     }
-  };
+  }
+};
+
 
   return (
     <main className="grid min-h-screen items-center justify-center grid-cols-12 w-full">

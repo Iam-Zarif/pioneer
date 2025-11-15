@@ -1,11 +1,11 @@
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+import { AuthProvider } from "@/contexts/AuthAndProfileContext";
+
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-light min-h-screen flex items-center justify-center">
-      {children}
-    </div>
+    <AuthProvider>
+      <div className="bg-light min-h-screen flex items-center justify-center">
+        {children}
+      </div>
+    </AuthProvider>
   );
 }

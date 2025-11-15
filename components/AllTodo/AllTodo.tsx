@@ -48,7 +48,7 @@ export default function AllTodo() {
           )}
         </div>
       </section>
-      {/* <NoTodoYet/> */}
+      <NoTodoYet/>
 
      {/* <IfTodoExist/> */}
     </>
