@@ -1,17 +1,16 @@
 "use client";
+import NoTodoYet from "./NoTodoYet";
 import search from "@/public/search.svg";
 import filter from "@/public/filter.svg";
-import no_todo from "@/public/no-todo.svg";
-import Image from "next/image";
-import React from "react";
+
 import FilterItems from "./FilterItems";
-import AddNewTaskModal from "./AddNewTaskModal";
+import React from "react";
+import Image from "next/image";
+import IfTodoExist from "./IfTodoExist";
 
 export default function AllTodo() {
   const [filterOpen, setFilterOpen] = React.useState(false);
-  const [todoOpen, setTodoOpen] = React.useState(false);
 
-  const toggleTodo = () => setTodoOpen(!todoOpen);
   const toggleFilter = () => setFilterOpen(!filterOpen);
 
   return (
@@ -49,23 +48,9 @@ export default function AllTodo() {
           )}
         </div>
       </section>
-      <section className="mt-6 bg-white border rounded-xl min-h-120 border-input flex items-center justify-center">
-        <div>
-          <Image
-            onClick={toggleTodo}
-            src={no_todo}
-            className="w-60 cursor-pointer"
-            alt="No Todo"
-            width={150}
-            height={150}
-          />
-          <p className="text-center text-2xl">No todos yet</p>
-        </div>
-      </section>
+      {/* <NoTodoYet/> */}
 
-      {todoOpen && (
-       <AddNewTaskModal toggleTodo={toggleTodo}/>
-      )}
+     {/* <IfTodoExist/> */}
     </>
   );
 }

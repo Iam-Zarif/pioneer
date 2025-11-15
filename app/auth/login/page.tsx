@@ -15,7 +15,8 @@ export default function LoginPage() {
         />
       </figure>
 
-      <section className="flex col-span-7 max-w-md mx-auto w-full items-center flex-col gap-2">
+     <div className="col-span-12 md:col-span-7 bg-white h-full flex items-center justify-center">
+       <section className="flex  max-w-md mx-auto w-full items-center flex-col gap-2">
         <h1 className="text-3xl font-bold text-dark">Log in to your account</h1>
         <p className="text-dark-gray">Start managing your tasks efficiently</p>
 
@@ -70,6 +71,7 @@ export default function LoginPage() {
           </div>
         </form>
       </section>
+     </div>
     </main>
   );
 }
