@@ -6,7 +6,29 @@ import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Dreamy Software",
-  description: "Dashboard",
+  description: "Dashboard for managing tasks and projects efficiently.",
+  openGraph: {
+    type: "website",
+    url: "https://dreamy-software.vercel.app",
+    title: "Dreamy Software",
+    description: "Dashboard for managing tasks and projects efficiently.",
+    siteName: "Dreamy Software",
+    images: [
+      {
+        url: "https://i.ibb.co.com/JWHFHFM6/logo.png",
+        width: 800,
+        height: 600,
+        alt: "Dreamy Software Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dreamy Software",
+    description: "Dashboard for managing tasks and projects efficiently.",
+    site: "@DreamySoftware", 
+    images: ["https://i.ibb.co.com/JWHFHFM6/logo.png"],
+  },
 };
 
 export default async function RootLayout({
