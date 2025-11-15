@@ -1,26 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", sans-serif !important;
+}
+
+:root {
+  --color-primary: #5272ff;    
+  --color-gray:#8CA3CD;
+  --color-green: #11c25d;
+  --color-red:#ee0039;
+  --color-black:#1e1e1e;
+  --color-white:#ffffff;
+  --color-light:#eef7ff;
+  --color-dark:#0d224a;
+  --color-dark-gray:#4B5563;
+  --color-input-border:#D1D5DB;
+}
+
+.text-primary { color: var(--color-primary); }
+.text-gray { color: var(--color-gray); }
+.text-green { color: var(--color-green); }
+.text-red { color: var(--color-red); }
+.text-black { color: var(--color-black); }
+.text-white { color: var(--color-white); }
+.text-light { color: var(--color-light); }
+.text-dark { color: var(--color-dark); }
+.text-dark-gray { color: var(--color-dark-gray); }
+
+/* Background */
+.bg-primary { background-color: var(--color-primary); }
+.bg-gray { background-color: var(--color-gray); }
+.bg-green { background-color: var(--color-green); }
+.bg-red { background-color: var(--color-red); }
+.bg-black { background-color: var(--color-black); }
+.bg-white { background-color: var(--color-white); }
+.bg-light { background-color: var(--color-light); }
+.bg-dark { background-color: var(--color-dark); }
+.bg-dark-gray { background-color: var(--color-dark-gray); }
+.bg-input { background-color: var(--color-input-border) !important; }
+
+/* Border */
+.border-primary { border-color: var(--color-primary); }
+.border-gray { border-color: var(--color-gray); }
+.border-green { border-color: var(--color-green); }
+.border-red { border-color: var(--color-red); }
+.border-black { border-color: var(--color-black); }
+.border-white { border-color: var(--color-white); }
+.border-light { border-color: var(--color-light); }
+.border-dark { border-color: var(--color-dark); }
+.border-dark-gray { border-color: var(--color-dark-gray); }
+.border-input { border-color: var(--color-input-border) !important; }
+
+/* Shadows */
+.shadow-primary { box-shadow: 0 4px 6px -1px var(--color-primary); }
+.shadow-gray { box-shadow: 0 4px 6px -1px var(--color-gray); }
+.shadow-green { box-shadow: 0 4px 6px -1px var(--color-green); }
+.shadow-red { box-shadow: 0 4px 6px -1px var(--color-red); }
+.shadow-black { box-shadow: 0 4px 6px -1px var(--color-black); }
+.shadow-white { box-shadow: 0 4px 6px -1px var(--color-white); }
+.shadow-light { box-shadow: 0 4px 6px -1px var(--color-light); }
+.shadow-dark { box-shadow: 0 4px 6px -1px var(--color-dark); }
+.shadow-dark-gray { box-shadow: 0 4px 6px -1px var(--color-dark-gray); }
+
+
+/* 1d3474 */
+
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
 }
