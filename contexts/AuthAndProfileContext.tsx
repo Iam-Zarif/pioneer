@@ -1,14 +1,21 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import axios, { AxiosInstance } from "axios";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+  useCallback,
+} from "react";
+import axios from "axios";
 
 interface User {
   id?: string;
   first_name?: string;
   last_name?: string;
   email?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface AuthContextType {
@@ -16,9 +23,10 @@ interface AuthContextType {
   loading: boolean;
   error: string | null;
   signup: (data: SignupData) => Promise<void>;
-  login: (data: LoginData) => Promise<void>;
+  login: (data: LoginData) => Promise<User>;
   logout: () => void;
-  getProfile: () => Promise<void>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>; // <-- added
+  getProfile: () => Promise<User | null>;
   updateProfile: (data: UpdateProfileData) => Promise<void>;
 }
 
@@ -40,7 +48,7 @@ interface UpdateProfileData {
   last_name?: string;
   email?: string;
   profile_image?: File;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface AuthProviderProps {
@@ -51,16 +59,20 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 function setCookie(name: string, value: string, days = 7) {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  document.cookie = name + "=" + encodeURIComponent(value) + "; expires=" + expires + "; path=/";
+  document.cookie =
+    name +
+    "=" +
+    encodeURIComponent(value) +
+    "; expires=" +
+    expires +
+    "; path=/";
 }
 
 function getCookie(name: string) {
-  return document.cookie
-    .split("; ")
-    .reduce((r, v) => {
-      const parts = v.split("=");
-      return parts[0] === name ? decodeURIComponent(parts[1]) : r;
-    }, "");
+  return document.cookie.split("; ").reduce((r, v) => {
+    const parts = v.split("=");
+    return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+  }, "");
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
@@ -70,121 +82,138 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const API = process.env.NEXT_PUBLIC_API;
 
-  const axiosInstance: AxiosInstance = axios.create({
-    baseURL: API,
-  });
+  const api = useCallback(
+    () =>
+      axios.create({
+        baseURL: API,
+        headers: {
+          Authorization: `Bearer ${getCookie("access_token")}`,
+        },
+      }),
+    [API]
+  );
 
-  axiosInstance.interceptors.request.use((config) => {
-    const token = getCookie("access_token");
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-    return config;
-  });
+  const getProfile = useCallback(async (): Promise<User | null> => {
+    const token = localStorage.getItem("access_token");
 
-  const handleRequest = async (apiCall: () => Promise<any>) => {
+    if (!token) {
+      setUser(null);
+      setLoading(false);
+      return null;
+    }
+
+    try {
+      const res = await api().get("/api/users/me/");
+      setUser(res.data);
+      return res.data;
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : typeof err === "string"
+          ? err
+          : "An unknown error occurred";
+      setError(msg);
+      setUser(null);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [api]);
+
+const signup = async (data: SignupData) => {
+  try {
+    await axios.post(`${API}/api/users/signup/`, data);
+
+    await login({ email: data.email, password: data.password });
+    
+  } catch (err: unknown) {
+    const msg =
+      err instanceof Error
+        ? err.message
+        : typeof err === "string"
+        ? err
+        : "An unknown error occurred";
+    setError(msg);
+    throw new Error(msg); 
+  }
+};
+
+
+  const login = async (data: LoginData): Promise<User> => {
     setLoading(true);
     setError(null);
+
     try {
-      const res = await apiCall();
-      return res;
-    } catch (err: any) {
-      const msg = err.response?.data?.message || err.message || "Something went wrong";
+      const res = await axios.post(`${API}/api/auth/login/`, data);
+      const token = res.data.access;
+      localStorage.setItem("access_token", token);
+      setCookie("access_token", token);
+
+      const profile = await getProfile(); // use getProfile here
+      return profile!;
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : typeof err === "string"
+          ? err
+          : "An unknown error occurred";
       setError(msg);
-      throw new Error(msg);
+      throw new Error(msg); // for signup
     } finally {
       setLoading(false);
     }
   };
 
-  const signup = async (data: SignupData) => {
-    const res = await handleRequest(() =>
-      axios.post(`${API}/api/users/signup/`, data)
-    );
-    await getProfile();
+  const updateProfile = async (data: UpdateProfileData) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        setError("No access token found");
+        return;
+      }
+
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== undefined) {
+          const val: string | Blob =
+            value instanceof File ? value : String(value);
+          formData.append(key, val);
+        }
+      });
+
+      const res = await api().put("/api/users/me/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      setUser((prev) => ({ ...prev, ...res.data }));
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : typeof err === "string"
+          ? err
+          : "An unknown error occurred";
+      setError(msg);
+      throw new Error(msg); // for signup
+    } finally {
+      setLoading(false);
+    }
   };
 
-const login = async (data: LoginData) => {
-  const res = await handleRequest(() =>
-    axios.post(`${API}/api/auth/login/`, data)
-  );
-  const token = res.data.access;
-  localStorage.setItem("access_token", token);
-  console.log("Login token set in localStorage:", token);
-  await getProfile();
-};
-
-const getProfile = async () => {
-  setLoading(true);
-  try {
-    const token = localStorage.getItem("access_token");
-    if (!token) return;
-
-    const res = await axiosInstance.get("/api/users/me/", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    console.log("Fetched user profile:", res.data);
-    setUser(res.data);
-  } catch (err) {
-    console.error("Error fetching profile:", err);
-    setUser(null);
-  } finally {
-    setLoading(false);
-  }
-};
-
-const updateProfile = async (data: UpdateProfileData) => {
-  setLoading(true);
-  setError(null);
-
-  try {
-    const token = localStorage.getItem("access_token");
-    if (!token) {
-      setError("No access token found");
-      return;
-    }
-
- let formData = new FormData();
-Object.entries(data).forEach(([key, value]) => {
-  if (value !== undefined && key !== "profile_image") {
-    formData.append(key, value);
-  }
-});
-
-if (data.profile_image instanceof File) {
-  formData.append("profile_image", data.profile_image); // key name must match backend
-}
-
-
-    const res = await axiosInstance.put("/api/users/me/", formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    console.log("Updated profile:", res.data);
-    setUser(res.data);
-
-  } catch (err: any) {
-    const msg = err.response?.data?.message || err.message || "Something went wrong";
-    setError(msg);
-    console.error("Update profile error:", msg);
-
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-
   const logout = () => {
-    document.cookie = "access_token=; max-age=0; path=/";
+    localStorage.removeItem("access_token");
+    setCookie("access_token", "", -1);
     setUser(null);
-    console.log("Logged out");
   };
 
   useEffect(() => {
     getProfile().catch(() => setLoading(false));
-  }, []);
+  }, [getProfile]);
 
   return (
     <AuthContext.Provider
@@ -194,6 +223,7 @@ if (data.profile_image instanceof File) {
         error,
         signup,
         login,
+        setUser,
         logout,
         getProfile,
         updateProfile,

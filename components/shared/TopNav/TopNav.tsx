@@ -1,9 +1,26 @@
+"use client";
+
 import logo from "@/public/logo.svg";
 import Image from "next/image";
 import notification from "@/public/notification.svg";
 import calender from "@/public/calender.svg";
+import { useEffect, useState } from "react";
 
 export default function TopNav() {
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formattedDate = `${String(currentTime.getDate()).padStart(2, "0")}/${
+    String(currentTime.getMonth() + 1).padStart(2, "0")
+  }/${currentTime.getFullYear()}`;
+
+  const dayName = currentTime.toLocaleDateString("en-US", { weekday: "long" });
+
+
   return (
     <div className="w-full z-9999 col-span-9">
       <div className="bg-white py-7 px-16 flex items-center w-full justify-between">
@@ -21,12 +38,23 @@ export default function TopNav() {
           </div>
         </div>
         <div className="flex items-center gap-6">
-          {" "}
-          <Image className="w-8" src={notification} alt="Notification" width={20} height={20} />
-          <Image className="w-8" src={calender} alt="Calender" width={20} height={20} />
-          <div className="text-dark">
-            <p>Friday</p>
-            <p className="-mt-1">07/11/2025</p>
+          <Image
+            className="w-8"
+            src={notification}
+            alt="Notification"
+            width={20}
+            height={20}
+          />
+          <Image
+            className="w-8"
+            src={calender}
+            alt="Calender"
+            width={20}
+            height={20}
+          />
+          <div className="text-dark text-sm font-medium">
+            <p>{dayName}</p>
+            <p className="-mt-1">{formattedDate}</p>
           </div>
         </div>
       </div>

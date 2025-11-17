@@ -3,14 +3,18 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import registerImg from "@/public/register.svg";
-import { validateRegister, RegisterFormValues, validatePassword } from "@/validations/registerValidation";
+import {
+  validateRegister,
+  RegisterFormValues,
+  validatePassword,
+} from "@/validations/registerValidation";
 import { useAuth } from "@/contexts/AuthAndProfileContext";
 
 export default function RegisterPage() {
-  const { signup, loading, error } = useAuth();
-  const router = useRouter(); 
+  const { signup, loading, error, login } = useAuth();
+  const router = useRouter();
 
   const [form, setForm] = useState<RegisterFormValues>({
     first_name: "",
@@ -24,7 +28,7 @@ export default function RegisterPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
 
     let fieldError: string | undefined = "";
     if (name === "password") {
@@ -36,24 +40,28 @@ export default function RegisterPage() {
       fieldError = validationErrors[name as keyof RegisterFormValues];
     }
 
-    setErrors(prev => ({ ...prev, [name]: fieldError }));
+    setErrors((prev) => ({ ...prev, [name]: fieldError }));
   };
 
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  const validationErrors = validateRegister(form);
-  setErrors(validationErrors);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const validationErrors = validateRegister(form);
+    setErrors(validationErrors);
 
-  if (Object.keys(validationErrors).length === 0) {
-    try {
-      await signup(form);
-      router.push("/auth/login");
-    } catch (err: any) {
-      console.error("Signup failed:", err.message);
+    if (Object.keys(validationErrors).length === 0) {
+      try {
+        await signup(form);
+        await login({ email: form.email, password: form.password });
+        router.push("/");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error("Signup failed:", err.message);
+        } else {
+          console.error("Signup failed");
+        }
+      }
     }
-  }
-};
-
+  };
 
   return (
     <main className="grid min-h-screen items-center justify-center grid-cols-12 w-full">
@@ -69,31 +77,43 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       <div className="col-span-12 md:col-span-7 bg-white h-full flex items-center justify-center">
         <section className="flex max-w-md mx-auto w-full items-center flex-col gap-2">
           <h1 className="text-3xl font-bold text-dark">Create your account</h1>
-          <p className="text-dark-gray">Start managing your tasks efficiently</p>
+          <p className="text-dark-gray">
+            Start managing your tasks efficiently
+          </p>
 
-          <form className="flex flex-col gap-4 mt-8 w-full" onSubmit={handleSubmit}>
-    
+          <form
+            className="flex flex-col gap-4 mt-8 w-full"
+            onSubmit={handleSubmit}
+          >
             <div className="flex flex-col md:flex-row w-full gap-4">
               <div className="flex flex-col gap-1 w-full">
-                <label className="text-black font-medium text-sm">First Name</label>
+                <label className="text-black font-medium text-sm">
+                  First Name
+                </label>
                 <input
                   name="first_name"
                   value={form.first_name}
                   onChange={handleChange}
                   className="border placeholder:text-gray text-sm font-light border-input rounded-lg p-2.5 focus:outline-none"
                 />
-                {errors.first_name && <p className="text-red-500 text-xs">{errors.first_name}</p>}
+                {errors.first_name && (
+                  <p className="text-red-500 text-xs">{errors.first_name}</p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1 w-full">
-                <label className="text-black font-medium text-sm">Last Name</label>
+                <label className="text-black font-medium text-sm">
+                  Last Name
+                </label>
                 <input
                   name="last_name"
                   value={form.last_name}
                   onChange={handleChange}
                   className="border placeholder:text-gray text-sm font-light border-input rounded-lg p-2.5 focus:outline-none"
                 />
-                {errors.last_name && <p className="text-red-500 text-xs">{errors.last_name}</p>}
+                {errors.last_name && (
+                  <p className="text-red-500 text-xs">{errors.last_name}</p>
+                )}
               </div>
             </div>
 
@@ -106,7 +126,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 type="email"
                 className="border placeholder:text-gray text-sm font-light border-input rounded-lg p-2.5 focus:outline-none"
               />
-              {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-xs">{errors.email}</p>
+              )}
             </div>
 
             {/* Password */}
@@ -119,12 +141,16 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 type="password"
                 className="border placeholder:text-gray text-sm font-light border-input rounded-lg p-2.5 focus:outline-none"
               />
-              {errors.password && <p className="text-red-500 text-xs">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-red-500 text-xs">{errors.password}</p>
+              )}
             </div>
 
             {/* Confirm Password */}
             <div className="flex flex-col gap-1">
-              <label className="text-black font-medium text-sm">Confirm Password</label>
+              <label className="text-black font-medium text-sm">
+                Confirm Password
+              </label>
               <input
                 name="confirmPassword"
                 value={form.confirmPassword}
@@ -132,7 +158,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 type="password"
                 className="border placeholder:text-gray text-sm font-light border-input rounded-lg p-2.5 focus:outline-none"
               />
-              {errors.confirmPassword && <p className="text-red-500 text-xs">{errors.confirmPassword}</p>}
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-xs">{errors.confirmPassword}</p>
+              )}
             </div>
 
             {/* Submit */}
@@ -143,11 +171,18 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               {loading ? "Signing Up..." : "Sign Up"}
             </button>
 
-            {error && <p className="text-red-500 font-normal text-sm">{error}</p>}
+            {error && (
+              <p className="text-red-500 font-normal text-sm">{error}</p>
+            )}
 
             <div className="flex justify-center items-center gap-1">
-              <p className="text-dark-gray font-normal">Already have an account?</p>
-              <Link href="/auth/login" className="text-primary hover:text-[#3b5dcc]">
+              <p className="text-dark-gray font-normal">
+                Already have an account?
+              </p>
+              <Link
+                href="/auth/login"
+                className="text-primary hover:text-[#3b5dcc]"
+              >
                 Log in
               </Link>
             </div>

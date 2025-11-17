@@ -1,9 +1,13 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
+// next.config.ts
+import { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   images: {
-    domains: [
-      "pioneer-alpha-website-django-s3-bucket-new-2.s3.amazonaws.com",
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**", // or specific hostname like "example.com"
+      },
     ],
   },
 };

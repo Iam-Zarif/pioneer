@@ -1,37 +1,62 @@
 "use client";
+
 import Image from "next/image";
-import logout from "@/public/logout.svg";
+import logoutIcon from "@/public/logout.svg";
 import useIcons from "@/hooks/icons/useIcons";
 import NavItem from "./NavItem";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthAndProfileContext";
+import { useEffect } from "react";
 
 export default function LeftNav() {
+  const { user, loading, logout, getProfile } = useAuth();
   const { TodoIcon, AccountIcon } = useIcons();
   const pathname = usePathname();
-  const { user, loading } = useAuth();
-  console.log("User in LeftNav:", user);
+  console.log(
+    "LeftNav - Current pathname:",
+    pathname,
+    "user:",
+    user,
+    "loading:",
+    loading
+  );
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push("/auth/login");
+  };
+  useEffect(() => {
+    if (!user) {
+      getProfile();
+    }
+  }, [user, getProfile]);
+  if (loading || !user) {
+    return (
+      <div className="bg-dark z-50 min-h-screen flex items-center justify-center">
+        <p className="text-white text-lg">Loading...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-dark z-99999 min-h-screen w-full col-span-3 flex flex-col justify-between">
+    <aside className="bg-dark z-50 min-h-screen relative flex flex-col justify-between w-full">
       <div>
         <div className="flex flex-col pt-12 items-center">
-          {loading ? (
-            <p className="text-white">Loading...</p>
-          ) : user ? (
+          {user ? (
             <>
-              {user.profile_image ? (
+              {typeof user.profile_image === "string" ? (
                 <Image
                   src={user.profile_image}
                   alt="Profile"
-                  width={120}
-                  height={60}
+                  width={80}
+                  height={80}
                   className="my-4 w-20 h-20 rounded-full object-cover"
                 />
               ) : (
-                <p className="text-white my-4 w-20 h-20 bg-gray rounded-full text-center flex items-center justify-center">
+                <div className="text-white my-4 w-20 h-20 bg-gray rounded-full flex items-center justify-center">
                   No Image
-                </p>
+                </div>
               )}
               <p className="text-white font-semibold text-lg">
                 {user.first_name} {user.last_name}
@@ -39,11 +64,11 @@ export default function LeftNav() {
               <p className="text-light font-light text-xs">{user.email}</p>
             </>
           ) : (
-            <p className="text-white my-4">No user</p>
+            <p className="text-white my-4">Guest</p>
           )}
         </div>
 
-        <section className="flex justify-center mt-8 mx-auto flex-col">
+        <nav className="flex flex-col mt-8 mx-auto">
           <NavItem
             label="Todos"
             Icon={TodoIcon}
@@ -56,13 +81,16 @@ export default function LeftNav() {
             href="/account"
             active={pathname === "/account"}
           />
-        </section>
+        </nav>
       </div>
 
-      <div className="flex items-center gap-3 absolute bottom-14 left-18 cursor-pointer">
-        <Image src={logout} alt="Logout" width={20} height={20} />
-        <p className="text-gray font-medium">Logout</p>
+      <div
+        className="flex items-center gap-3 absolute bottom-14 left-16 cursor-pointer hover:text-white transition"
+        onClick={handleLogout}
+      >
+        <Image src={logoutIcon} alt="Logout" width={20} height={20} />
+        <span className="text-gray font-medium">Logout</span>
       </div>
-    </div>
+    </aside>
   );
 }

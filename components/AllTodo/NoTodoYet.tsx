@@ -1,18 +1,22 @@
 "use client";
 
-import no_todo from "@/public/no-todo.svg";
 import Image from "next/image";
 import React from "react";
-
+import no_todo from "@/public/no-todo.svg";
 import AddNewTaskModal from "./AddNewTaskModal";
-export default function NoTodoYet() {
+import { Todo } from "./types";
+
+interface NoTodoYetProps {
+  onTodoAdded: (newTodo: Todo) => void;
+}
+
+export default function NoTodoYet({ onTodoAdded }: NoTodoYetProps) {
   const [todoOpen, setTodoOpen] = React.useState(false);
 
-  const toggleTodo = () => setTodoOpen(!todoOpen);
+  const toggleTodo = () => setTodoOpen(prev => !prev);
+
   return (
     <>
-      {" "}
-     
       <section className="mt-6 bg-white border rounded-xl min-h-120 border-input flex items-center justify-center">
         <div>
           <Image
@@ -23,10 +27,19 @@ export default function NoTodoYet() {
             width={150}
             height={150}
           />
-          <p className="text-center text-2xl">No todos yet</p>
+          <p className="text-center text-2xl mt-4">No todos yet</p>
         </div>
       </section>
-      {todoOpen && <AddNewTaskModal toggleTodo={toggleTodo} />}
+
+      {todoOpen && (
+        <AddNewTaskModal
+          toggleTodo={toggleTodo}
+          onTodoAdded={(todo: Todo) => {
+            onTodoAdded(todo);
+            toggleTodo();
+          }}
+        />
+      )}
     </>
   );
 }

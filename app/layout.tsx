@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthAndProfileContext"; // <- import
 import LayoutContent from "./LayoutContent";
+import { TodoProvider } from "@/contexts/TodoContext";
+import ProtectedRoute from "@/contexts/ProtectedRoute";
 
 export const metadata: Metadata = {
   title: "Dreamy Software",
@@ -35,12 +37,15 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html lang="en">
       <body className="bg-white min-h-screen">
         <AuthProvider>
-          <LayoutContent>{children}</LayoutContent>
+          <ProtectedRoute>
+            <TodoProvider>
+              <LayoutContent>{children}</LayoutContent>
+            </TodoProvider>
+          </ProtectedRoute>
         </AuthProvider>
       </body>
     </html>

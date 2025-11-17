@@ -3,7 +3,7 @@ import React from "react";
 
 type NavItemProps = {
   label: string;
-  Icon: React.FC<any>;
+  Icon: React.FC<React.SVGProps<SVGSVGElement>>; 
   active?: boolean;
   href: string;
 };
