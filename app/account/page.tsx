@@ -74,30 +74,25 @@ export default function AccountPage() {
 useEffect(() => {
   if (!user) return;
 
-  setForm(prev => ({
-    ...prev,
-    first_name: user.first_name || prev.first_name,
-    last_name: user.last_name || prev.last_name,
-    email: user.email || prev.email,
-    address: user.address || prev.address,
-    contact_number: user.contact_number || prev.contact_number,
-    birthday: user.birthday || prev.birthday,
-    bio: user.bio || prev.bio,
-  }));
+  const profileImageUrl =
+    typeof user.profile_image === "string" ? user.profile_image : null;
 
-  setInitialForm(prev => ({
-    ...prev,
-    first_name: user.first_name || prev.first_name,
-    last_name: user.last_name || prev.last_name,
-    email: user.email || prev.email,
-    address: user.address || prev.address,
-    contact_number: user.contact_number || prev.contact_number,
-    birthday: user.birthday || prev.birthday,
-    bio: user.bio || prev.bio,
-  }));
+  const normalizedUser = {
+    first_name: user.first_name || "",
+    last_name: user.last_name || "",
+    email: user.email || "",
+    address: typeof user.address === "string" ? user.address : "",
+    contact_number: typeof user.contact_number === "string" ? user.contact_number : "",
+    birthday: typeof user.birthday === "string" ? user.birthday : "",
+    bio: typeof user.bio === "string" ? user.bio : "",
+  };
 
-  setImagePreview(user.profile_image || null);
+  setForm(normalizedUser);
+  setInitialForm(normalizedUser);
+  setImagePreview(profileImageUrl);
 }, [user]);
+
+
 
 
 
@@ -148,7 +143,7 @@ useEffect(() => {
   const handleCancel = () => {
     setForm({ ...initialForm });
     setProfileImage(null);
-    setImagePreview(user?.profile_image || null);
+    setImagePreview(typeof user?.profile_image === "string" ? user.profile_image : null);
     setStatus("idle");
   };
 

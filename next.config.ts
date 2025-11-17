@@ -1,4 +1,3 @@
-// next.config.ts
 import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -6,9 +5,13 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**", // or specific hostname like "example.com"
+        hostname: "**",
       },
     ],
+  },
+  experimental: {
+    // add other experimental flags if needed, e.g.,
+    // appDir: true
   },
 };
 
