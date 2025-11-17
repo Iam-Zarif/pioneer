@@ -12,14 +12,16 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
   if (isAuthRoute) return <main className="h-full">{children}</main>;
 
   return (
-    <div className="grid grid-cols-12 max-w-360 w-full mx-auto min-h-screen">
-      <div className="col-span-3  w-full   z-9999">
-        <LeftNav />
-      </div>
-      <div className="col-span-9 bg-light h-full flex flex-col">
-        <TopNav />
-        <main className=" mx-auto w-full h-full">{children}</main>
-      </div>
-    </div>
+   <div className="grid grid-cols-12 max-w-360 w-full mx-auto min-h-screen">
+  <div className="col-span-3 w-full z-50 hidden md:block">
+    <LeftNav />
+  </div>
+
+  <div className="col-span-12 md:col-span-9 bg-light h-full flex flex-col">
+    <TopNav />
+    <main className="mx-auto w-full h-full">{children}</main>
+  </div>
+</div>
+
   );
 }

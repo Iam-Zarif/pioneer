@@ -97,7 +97,7 @@ const handleSubmit = async () => {
                 onChange={(e) => setDate(e.target.value)}
                 className="w-full font-normal text-sm border border-input rounded-lg py-2 px-3 focus:outline-none"
               />
-              <Image
+              <Image 
                 src={datePicker}
                 alt="date picker"
                 className="absolute w-3.5 cursor-pointer top-3 right-3"
@@ -151,7 +151,7 @@ const handleSubmit = async () => {
               {loading ? "Saving..." : "Done"}
             </button>
             <div className="bg-red p-2.5 cursor-pointer rounded-lg">
-              <Image src={Delete} alt="delete" className="w-3.5" width={20} height={20} />
+              <Image  src={Delete} alt="delete" className="w-3.5" width={20} height={20} />
             </div>
           </div>
         </div>

@@ -18,7 +18,7 @@ const ProfileImageUploader = ({
   <div className="flex items-center gap-6">
     <div className="w-22 h-22 bg-[#9F9F9F] rounded-full relative">
       {imagePreview ? (
-        <Image
+        <Image 
           src={imagePreview}
           alt="Profile"
           width={88}
@@ -29,7 +29,7 @@ const ProfileImageUploader = ({
         <div className="w-full h-full rounded-full bg-[#9F9F9F]" />
       )}
       <div className="absolute -bottom-1 -right-1 w-8 h-8">
-        <Image
+        <Image 
           src={cam}
           alt="Camera"
           width={32}
@@ -40,7 +40,7 @@ const ProfileImageUploader = ({
     </div>
 
     <label className="bg-primary px-5 py-2.5 cursor-pointer rounded-md flex items-center gap-2">
-      <Image src={upload} alt="Upload" width={16} height={16} />
+      <Image  src={upload} alt="Upload" width={16} height={16} />
       <span className="text-white text-sm font-light">Upload New Photo</span>
       <input
         type="file"
@@ -229,7 +229,7 @@ useEffect(() => {
               }
               className="w-full text-sm border border-input rounded-lg py-2.5 px-3 mt-1"
             />
-            <Image
+            <Image 
               src={birth}
               alt="date picker"
               className="absolute w-4 cursor-pointer top-9 right-3"

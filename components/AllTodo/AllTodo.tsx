@@ -69,7 +69,7 @@ const filteredTodos: Todo[] = useMemo(() => {
 
   return (
     <>
-      <section className="mt-8 flex w-full items-center gap-3">
+      <section className="lg:mt-8 mt-4 flex w-full items-center gap-3">
         <div className="w-full relative">
           <input
             type="text"
@@ -79,8 +79,9 @@ const filteredTodos: Todo[] = useMemo(() => {
             onChange={(e) => setSearchTerm(e.target.value)}
             disabled={loading}
           />
-          <Image
-            className="absolute top-1/2 right-0 -translate-y-1/2"
+          <Image 
+         
+            className="absolute w-auto h-auto top-1/2 right-0 -translate-y-1/2"
             alt="search"
             width={36}
             height={45}
@@ -90,10 +91,10 @@ const filteredTodos: Todo[] = useMemo(() => {
 
         <div
           ref={filterRef}
-          className="border relative bg-white flex-nowrap text-nowrap px-2.5 cursor-pointer py-1.5 border-input rounded-lg flex items-center gap-3"
+          className="border relative bg-white flex-nowrap text-nowrap pl-2.5 pr-4 cursor-pointer py-1.5 border-input rounded-lg flex items-center gap-1 lg:gap-3"
         >
-          <p onClick={() => setFilterOpen(!filterOpen)}>Filter By</p>
-          <Image alt="filter" width={24} height={45} src={filterIcon} />
+          <p className="text-sm lg:text-[16px]" onClick={() => setFilterOpen(!filterOpen)}>Filter By</p>
+          <Image  alt="filter" className="w-auto h-auto" width={24} height={45} src={filterIcon} />
 
           {filterOpen && (
             <div className="absolute px-2.5 pb-2 top-10 right-0 shadow-[0px_3px_6px_0px_#00000029] text-sm text-dark-gray bg-white rounded-md w-44 z-10">

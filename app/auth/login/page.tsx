@@ -43,9 +43,9 @@
     };
 
     return (
-      <main className="grid min-h-screen items-center justify-center grid-cols-12 w-full">
+      <main className="grid  min-h-screen items-center justify-center grid-cols-12 w-full">
         <figure className="hidden  lg:flex h-screen w-full col-span-5">
-          <Image
+          <Image 
             src={login}
             alt="Login illustration"
             className="object-cover w-full h-full"
@@ -53,7 +53,7 @@
           />
         </figure>
 
-        <div className="col-span-12 lg:col-span-7 bg-white h-full flex items-center justify-center">
+        <div className="col-span-12 lg:col-span-7 px-4 lg:px-0 bg-white h-full flex items-center justify-center">
           <section className="flex max-w-md mx-auto w-full items-center flex-col gap-2">
             <h1 className="text-3xl font-bold text-dark">
               Log in to your account

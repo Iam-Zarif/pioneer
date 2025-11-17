@@ -19,7 +19,7 @@ export default function NoTodoYet({ onTodoAdded }: NoTodoYetProps) {
     <>
       <section className="mt-6 bg-white border rounded-xl min-h-120 border-input flex items-center justify-center">
         <div>
-          <Image
+          <Image 
             onClick={toggleTodo}
             src={no_todo}
             className="w-60 cursor-pointer"

@@ -54,7 +54,7 @@ const shortDesc = words.length > 8 ? words.slice(0, 8).join(" ") + "..." : todo.
             >
               {todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1)}
             </p>
-            <Image alt="boxes" width={10} height={20} src={boxes} />
+            <Image  className="w-auto h-auto" alt="boxes" width={10} height={20} src={boxes} />
           </div>
         </div>
 
@@ -73,7 +73,7 @@ const shortDesc = words.length > 8 ? words.slice(0, 8).join(" ") + "..." : todo.
               onEdit(todo);
             }}
           >
-            <Image alt="edit" width={15} height={15} src={editIcon} />
+            <Image  className="w-auto h-auto" alt="edit" width={15} height={15} src={editIcon} />
           </div>
 
           <div
@@ -83,7 +83,7 @@ const shortDesc = words.length > 8 ? words.slice(0, 8).join(" ") + "..." : todo.
               onDelete(todo);
             }}
           >
-            <Image alt="delete" width={15} height={15} src={delete_red} />
+            <Image  className="w-auto h-auto" alt="delete" width={15} height={15} src={delete_red} />
           </div>
         </div>
       </div>

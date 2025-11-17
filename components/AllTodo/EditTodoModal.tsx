@@ -66,7 +66,7 @@ export default function EditTodoModal({ title, setTitle, date, setDate, priority
                 onChange={(e) => setDate(e.target.value)}
                 className="w-full font-normal text-sm border border-input rounded-lg py-2 px-3 focus:outline-none"
               />
-              <Image
+              <Image 
                 src={datePicker}
                 alt="date picker"
                 className="absolute w-3.5 cursor-pointer top-3 right-3"
@@ -125,7 +125,7 @@ export default function EditTodoModal({ title, setTitle, date, setDate, priority
             </button>
 
             <div className="bg-red p-2.5 cursor-pointer rounded-lg">
-              <Image src={Delete} alt="delete" className="w-3.5" />
+              <Image  src={Delete} alt="delete" className="w-3.5" />
             </div>
           </div>
         </div>

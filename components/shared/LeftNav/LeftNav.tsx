@@ -40,13 +40,13 @@ export default function LeftNav() {
   }
 
   return (
-    <aside className="bg-dark z-50 min-h-screen relative flex flex-col justify-between w-full">
+<aside className="bg-dark z-50 min-h-screen  flex flex-col justify-between w-64 md:w-full fixed md:relative left-0 top-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
       <div>
         <div className="flex flex-col pt-12 items-center">
           {user ? (
             <>
               {typeof user.profile_image === "string" ? (
-                <Image
+                <Image 
                   src={user.profile_image}
                   alt="Profile"
                   width={80}
@@ -88,7 +88,7 @@ export default function LeftNav() {
         className="flex items-center gap-3 absolute bottom-14 left-16 cursor-pointer hover:text-white transition"
         onClick={handleLogout}
       >
-        <Image src={logoutIcon} alt="Logout" width={20} height={20} />
+        <Image  src={logoutIcon} className="w-auto h-auto" alt="Logout" width={20} height={20} />
         <span className="text-gray font-medium">Logout</span>
       </div>
     </aside>

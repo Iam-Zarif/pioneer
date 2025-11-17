@@ -128,12 +128,12 @@ export default function IfTodoExist({ filteredTodos }: Props) {
     return <div className="w-full text-center py-10 text-gray-500">No Todos Found</div>;
 
   return (
-    <section className="mt-10 overflow-x-hidden">
+    <section className="lg:mt-10 mt-6 overflow-x-hidden">
       <p className="text-lg font-semibold">Your Tasks</p>
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={localTodos.map((t) => t.id.toString())} strategy={verticalListSortingStrategy}>
-          <div className="mt-6 grid grid-cols-3 gap-3 overflow-y-auto max-h-[60vh] pr-2 thin-scrollbar">
+          <div className="mt-6 grid lg:grid-cols-3 gap-3 overflow-y-auto max-h-[60vh] pr-2 thin-scrollbar">
             {localTodos.map((todo) => (
               <SortableTodo key={todo.id} todo={todo} onEdit={openEditModal} onDelete={openConfirm} />
             ))}

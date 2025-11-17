@@ -66,7 +66,7 @@ export default function RegisterPage() {
   return (
     <main className="grid min-h-screen items-center justify-center grid-cols-12 w-full">
       <figure className="hidden md:flex h-screen w-full col-span-5">
-        <Image
+        <Image 
           src={registerImg}
           alt="register illustration"
           className="object-cover w-full h-full"
@@ -74,7 +74,7 @@ export default function RegisterPage() {
         />
       </figure>
 
-      <div className="col-span-12 md:col-span-7 bg-white h-full flex items-center justify-center">
+      <div className="col-span-12 md:col-span-7 bg-white px-4 lg:px-0 h-full flex items-center justify-center">
         <section className="flex max-w-md mx-auto w-full items-center flex-col gap-2">
           <h1 className="text-3xl font-bold text-dark">Create your account</h1>
           <p className="text-dark-gray">
